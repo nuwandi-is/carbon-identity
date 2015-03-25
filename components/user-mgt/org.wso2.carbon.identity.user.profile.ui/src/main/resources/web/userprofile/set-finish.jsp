@@ -37,6 +37,7 @@
 <%@ page import="org.wso2.carbon.identity.user.profile.stub.types.UserFieldDTO" %>
 <%@ page import="org.wso2.carbon.identity.user.profile.stub.types.UserProfileDTO" %>
 <%@ page import="java.text.MessageFormat" %>
+<%@ page import="org.wso2.carbon.user.mgt.ui.Util" %>
 
 <%
 	String profile = CharacterEncoder.getSafeText(request.getParameter("profile"));
@@ -59,7 +60,7 @@
         UserProfileCient client = new UserProfileCient(cookie, backendServerURL, configContext);    
         
         try {
-        	profileDTO = client.getUserProfile(username,profile);
+        	profileDTO = client.getUserProfile(Util.decodeHTMLCharacters(username),profile);
         	if (UserCoreConstants.DEFAULT_PROFILE.equals(profile)||profileDTO!=null && profileDTO.getProfileName()!=null) {  
         		 String message = resourceBundle.getString("user.profile.with.given.name.exists");
         		 CarbonUIMessage.sendCarbonUIMessage(message, CarbonUIMessage.INFO, request);
@@ -88,7 +89,7 @@
         userprofile.setProfileName(profile);
         userprofile.setFieldValues(fieldDTOs); 
         userprofile.setProfileConifuration(profileConfiguration);
-        client.setUserProfile(username, userprofile);
+        client.setUserProfile(Util.decodeHTMLCharacters(username), userprofile);
         String message = resourceBundle.getString("user.profile.added.successfully");
         CarbonUIMessage.sendCarbonUIMessage(message,CarbonUIMessage.INFO, request);
         if ("true".equals(fromUserMgt)) {
@@ -98,7 +99,7 @@
         }
     } catch (Exception e) {
         String message = MessageFormat.format(resourceBundle.getString(
-            "error.while.updating.user.profile"), username, e.getMessage());
+            "error.while.updating.user.profile"), Util.decodeHTMLCharacters(username), e.getMessage());
     	CarbonUIMessage.sendCarbonUIMessage(message, CarbonUIMessage.ERROR, request);
         forwardTo = "edit.jsp?username=" + username + "&profile=" + profile + "&fromUserMgt="+fromUserMgt;
     }
