@@ -39,6 +39,7 @@
 <%@ page import="org.wso2.carbon.user.mgt.ui.UserAdminClient" %>
 <%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.UserStoreInfo" %>
 <%@page import="java.net.URLEncoder" %>
+<%@ page import="org.wso2.carbon.user.mgt.ui.Util" %>
 
 <%
     boolean readOnlyUserStore = false;
@@ -75,11 +76,11 @@
         client = new UserProfileCient(cookie,
                 backendServerURL, configContext);
         readOnlyUserStore = client.isReadOnlyUserStore();
-     	profiles = client.getUserProfiles(username);
+     	profiles = client.getUserProfiles(Util.decodeHTMLCharacters(username));
 
 
         //read the domain of the user
-        String userDomain = UserProfileCient.extractDomainFromName(username);
+        String userDomain = UserProfileCient.extractDomainFromName(Util.decodeHTMLCharacters(username));
         if (userDomain != null) {
             //i.e primary
             multipleProfilesEnabled = client.isAddProfileEnabledForDomain(userDomain);
