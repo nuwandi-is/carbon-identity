@@ -32,6 +32,8 @@
 
 <jsp:include page="../dialog/display_messages.jsp"/>
 <%@ page import="org.wso2.carbon.ui.CarbonUIMessage" %>
+<%@page import="java.net.URLEncoder" %>
+<%@ page import="org.wso2.carbon.user.mgt.ui.Util" %>
 
 <%
     boolean readOnlyUserStore = false;
@@ -61,7 +63,7 @@
                 .getServletContext().getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
         UserProfileCient client = new UserProfileCient(cookie, backendServerURL,
                 configContext);
-        userProfile = client.getUserProfile(username, profile);
+        userProfile = client.getUserProfile(Util.decodeHTMLCharacters(username), profile);
         
         if ("readonly".equals(userProfile.getProfileConifuration())){
         	readOnlyUserStore = true;
@@ -306,7 +308,7 @@
                                 }
                             %>
                             <input type="button" class="button"
-                                              onclick="javascript:location.href='index.jsp?username=<%=username%>&fromUserMgt=<%=fromUserMgt%>&editCancel=true'"  
+                                              onclick="javascript:location.href='index.jsp?username=<%=URLEncoder.encode(username)%>&fromUserMgt=<%=fromUserMgt%>&editCancel=true'"
                                           value="<fmt:message key='cancel'/>"/></td>
                     </tr>
                     </tbody>

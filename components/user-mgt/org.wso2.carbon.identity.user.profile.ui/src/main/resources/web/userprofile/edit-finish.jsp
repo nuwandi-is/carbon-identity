@@ -37,6 +37,7 @@
 <%@ page import="org.wso2.carbon.identity.user.profile.stub.types.UserProfileDTO" %>
 <%@ page import="java.text.MessageFormat" %>
 <%@page import="java.net.URLEncoder" %>
+<%@ page import="org.wso2.carbon.user.mgt.ui.Util" %>
 
 <%
 	String profile = CharacterEncoder.getSafeText(request.getParameter("profile"));
@@ -79,7 +80,7 @@
         userprofile.setProfileName(profile);
         userprofile.setFieldValues(fieldDTOs);      
         userprofile.setProfileConifuration(profileConfiguration);
-        client.setUserProfile(username, userprofile);
+        client.setUserProfile(Util.decodeHTMLCharacters(username), userprofile);
         String message = resourceBundle.getString("user.profile.updated.successfully");
         CarbonUIMessage.sendCarbonUIMessage(message,CarbonUIMessage.INFO, request);
         if ("true".equals(fromUserMgt)) {
@@ -95,7 +96,7 @@
 
     } catch (Exception e) {
         String message = MessageFormat.format(resourceBundle.getString(
-                "error.while.updating.user.profile"), username, e.getMessage());
+                "error.while.updating.user.profile"), Util.decodeHTMLCharacters(username), e.getMessage());
     	CarbonUIMessage.sendCarbonUIMessage(message, CarbonUIMessage.ERROR, request);
         forwardTo = "edit.jsp?username=" + username + "&profile=" + profile + "&fromUserMgt=true&noOfProfiles=" + noOfProfiles;
     }

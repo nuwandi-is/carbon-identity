@@ -31,6 +31,7 @@
 
 <jsp:include page="../dialog/display_messages.jsp"/>
 <%@ page import="org.wso2.carbon.ui.CarbonUIMessage" %>
+<%@ page import="org.wso2.carbon.user.mgt.ui.Util" %>
 
 <%
     String username = CharacterEncoder.getSafeText((String) request.getParameter("username"));
